@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Rodrigo Serradura"]
   spec.email         = ["rodrigo@ysimplicity.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{Functional Net::HTTP wrapper}
+  spec.description   = %q{Functional Net::HTTP wrapper}
+  spec.homepage      = "https://github.com/serradura/request_via"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -29,8 +29,10 @@ Gem::Specification.new do |spec|
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
+  spec.required_ruby_version = ">= 2.2.2"
 
   spec.add_development_dependency "bundler", "~> 1.15"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "minitest", "~> 5.0"
+  spec.add_development_dependency "webmock", "~> 3.1"
 end
