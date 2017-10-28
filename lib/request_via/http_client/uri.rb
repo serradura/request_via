@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 module RequestVia
-  module Http
+  module HttpClient
 
     module URI
       extend self

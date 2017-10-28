@@ -3,11 +3,7 @@
 
 module RequestVia
   module Func
-    ParseURI = -> url { Http::URI.parse!(url) }.freeze
-
-    HttpClient = -> uri {
-      Http.client(uri, Http::URI.https?(uri))
-    }.freeze
+    ParseURI = -> url { HttpClient::URI.parse!(url) }.freeze
 
     IsAHash = -> data { data.is_a?(::Hash) }.freeze
 
