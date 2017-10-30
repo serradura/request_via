@@ -7,21 +7,21 @@ module Support
       def call(protocol_to_request:)
         setup(protocol_to_request)
 
-        test.stub_request http_method, @example_com
-        test.stub_request http_method, @www_example_com
+        stub_request(@example_com)
+        stub_request(@www_example_com)
 
-        test.assert_equal '200', @request.(Routes::EXAMPLE_COM).code
-        test.assert_equal '200', @request.(Routes::WWW_EXAMPLE_COM).code
+        test.assert Func::IsOK.(@request.(Routes[:example_com]))
+        test.assert Func::IsOK.(@request.(Routes[:www_example_com]))
       end
 
       private
 
       def setup(protocol_to_request)
-        @example_com = Routes.example_com(protocol: protocol_to_request)
+        routes = Routes::To.(protocol_to_request)
 
-        @www_example_com = Routes.www_example_com(protocol: protocol_to_request)
-
-        @request = RequestVia.const_get http_method_const_name
+        @request = Func::GetRequestViaHTTPMethod.(http_method)
+        @example_com = routes.(:example_com)
+        @www_example_com = routes.(:www_example_com)
       end
     end
 

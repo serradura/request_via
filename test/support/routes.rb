@@ -5,29 +5,40 @@ module  Support
   module Routes
     extend self
 
-    EXAMPLE_COM = 'example.com'
+    HOSTS = {
+      example_com: 'example.com',
+      www_example_com: 'www.example.com'
+    }.freeze
 
-    WWW_EXAMPLE_COM = "www.#{EXAMPLE_COM}"
+    Http = -> url {
+      "http://#{url}"
+    }.freeze
 
-    Http = -> url { "http://#{url}" }
+    Https = -> url {
+      "https://#{url}"
+    }.freeze
 
-    Https = -> url { "https://#{url}" }
+    ResolveProtocol = -> protocol {
+      String(protocol == false ? '' : protocol)
+        .strip
+        .downcase
+    }.freeze
 
     BuildRoute = -> (host, protocol) {
-      case String(protocol).downcase
-      when 'false' then host
-      when 'https' then Https.(host)
+      case ResolveProtocol.(protocol)
+      when '' then host
       when 'http' then Http.(host)
+      when 'https' then Https.(host)
       else fail NotImplementedError
       end
-    }
+    }.freeze
 
-    def example_com(protocol: false)
-      BuildRoute.(EXAMPLE_COM, protocol)
-    end
+    To = -> (protocol, host) {
+      BuildRoute.(self[host], protocol)
+    }.curry.freeze
 
-    def www_example_com(protocol: false)
-      BuildRoute.(WWW_EXAMPLE_COM, protocol)
+    def [](host)
+      HOSTS.fetch(host)
     end
   end
 

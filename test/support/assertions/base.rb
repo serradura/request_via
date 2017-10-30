@@ -17,8 +17,10 @@ module Support
 
       private
 
-      def http_method_const_name
-        String(http_method).capitalize
+      def stub_request(url, mock_data = {})
+        test.stub_request(http_method, url).tap do |request|
+          request.with(mock_data) unless mock_data.empty?
+        end
       end
     end
 
