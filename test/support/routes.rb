@@ -40,6 +40,7 @@ module  Support
     def [](host)
       HOSTS.fetch(host)
     end
+    alias_method :without_protocol, :[]
   end
 
 end
