@@ -1,6 +1,6 @@
 require "test_helper"
 
-class RequestViaMethodPostTest < Minitest::Test
+class RequestViaPostTest < Minitest::Test
   def setup
     @use_cases = Support::Assertions::To::Post.(context: self)
   end

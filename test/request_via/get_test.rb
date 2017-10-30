@@ -1,6 +1,6 @@
 require "test_helper"
 
-class RequestViaMethodGetTest < Minitest::Test
+class RequestViaGetTest < Minitest::Test
   def setup
     @use_cases = Support::Assertions::To::Get.(context: self)
   end
