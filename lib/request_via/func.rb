@@ -2,7 +2,15 @@
 
 module RequestVia
   module Func
-    ParseURI = -> url { HttpClient::URI.parse!(url) }.freeze
+    ParseURI = -> url {
+      if url.start_with?('http://', 'https://')
+        ::URI.parse(url)
+      elsif /([^:]+)?:?\/\// !~ url
+        ::URI.parse("http://#{url}")
+      else
+        fail ::URI::InvalidURIError, 'URI scheme must be http:// or https://'
+      end
+    }.freeze
 
     IsAHash = -> data { data.is_a?(::Hash) }.freeze
 
@@ -36,7 +44,7 @@ module RequestVia
       -> (url, params: nil, headers: nil, response_and_request: false) {
         uri = uri_builder.(url, params)
         req = SetRequestHeaders.(request_builder.(uri, params), headers)
-        res = HttpClient.(uri).request(req)
+        res = HTTPClient.(uri).request(req)
         response_and_request ? [res, req] : res
       }
     }.freeze

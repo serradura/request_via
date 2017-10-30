@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 module RequestVia
-  module HttpClient
+  module HTTPClient
     extend self
 
     def call(uri)
       net_http = Net::HTTP.new(uri.host, uri.port)
 
-      URI.https?(uri) ? set_https!(net_http) : net_http
+      return net_http unless uri.is_a?(URI::HTTPS)
+
+      set_https!(net_http)
     end
 
     private

@@ -4,7 +4,6 @@ require 'net/https'
 require 'uri'
 
 require "request_via/version"
-require "request_via/http_client/uri"
 require "request_via/http_client"
 require "request_via/func"
 

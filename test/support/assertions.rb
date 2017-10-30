@@ -3,20 +3,20 @@
 module  Support
   module Assertions
     module To
-      HttpMethod = -> (http_method, context:) {
+      HTTPMethod = -> (http_method, context:) {
         -> use_case {
           assertion = Support::Assertions.const_get(use_case)
           assertion.new(context, http_method: http_method)
         }
       }.curry.freeze
 
-      Get = HttpMethod.(:get).freeze
+      Get = HTTPMethod.(:get).freeze
 
-      Post = HttpMethod.(:post).freeze
+      Post = HTTPMethod.(:post).freeze
 
-      Put = HttpMethod.(:put).freeze
+      Put = HTTPMethod.(:put).freeze
 
-      Delete = HttpMethod.(:delete).freeze
+      Delete = HTTPMethod.(:delete).freeze
     end
   end
 end

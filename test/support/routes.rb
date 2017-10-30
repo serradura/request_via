@@ -10,11 +10,11 @@ module  Support
       www_example_com: 'www.example.com'
     }.freeze
 
-    Http = -> url {
+    HTTP = -> url {
       "http://#{url}"
     }.freeze
 
-    Https = -> url {
+    HTTPS = -> url {
       "https://#{url}"
     }.freeze
 
@@ -27,8 +27,8 @@ module  Support
     BuildRoute = -> (host, protocol) {
       case ResolveProtocol.(protocol)
       when '' then host
-      when 'http' then Http.(host)
-      when 'https' then Https.(host)
+      when 'http' then HTTP.(host)
+      when 'https' then HTTPS.(host)
       else fail NotImplementedError
       end
     }.freeze
