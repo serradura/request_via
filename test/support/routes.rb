@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module  Support
+
   module Routes
     extend self
 
@@ -27,4 +30,5 @@ module  Support
       BuildRoute.(WWW_EXAMPLE_COM, protocol)
     end
   end
+
 end
