@@ -6,6 +6,7 @@ require 'webmock/minitest'
 
 require_relative 'support/func'
 require_relative 'support/routes'
+require_relative 'support/assertions'
 require_relative 'support/assertions/base'
 require_relative 'support/assertions/request_with_body'
 require_relative 'support/assertions/request_with_query'
