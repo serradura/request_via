@@ -50,11 +50,11 @@ module RequestVia
     }.freeze
 
     FetchWithBodyVia = -> http_method {
-      FetchWith.(URIWithoutParams, RequestWithBody.(http_method)).freeze
+      FetchWith.(URIWithoutParams, RequestWithBody.(http_method))
     }.freeze
 
     FetchWithQueryStringVia = -> http_method {
-      FetchWith.(URIWithParams, RequestWithoutBody.(http_method)).freeze
+      FetchWith.(URIWithParams, RequestWithoutBody.(http_method))
     }.freeze
   end
 end
