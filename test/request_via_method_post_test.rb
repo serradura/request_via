@@ -8,14 +8,15 @@ class RequestViaMethodPostTest < Minitest::Test
   WWW_EXAMPLE_COM = "www.#{EXAMPLE_COM}"
 
   def test_request_without_protocol
-    assertion = Support::Assertions::RequestWithoutProtocol.new(self)
-    assertion.(:post, protocol_to_request: 'http')
+    assert_http = Support::Assertions::RequestWithoutProtocol.new(self, http_method: :post)
+    assert_http.(protocol_to_request: 'http')
   end
 
   def test_response_and_request_option
-    assertion = Support::Assertions::ResponseAndRequestOption.new(self)
-    assertion.(:post, protocol_to_request: 'http')
-    assertion.(:post, protocol_to_request: 'https')
+    assert_http = Support::Assertions::ResponseAndRequestOption.new(self, http_method: :post)
+    assert_http.(protocol_to_request: false)
+    assert_http.(protocol_to_request: 'http')
+    assert_http.(protocol_to_request: 'https')
   end
 
   def test_post_request
