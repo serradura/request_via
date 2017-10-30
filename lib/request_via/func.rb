@@ -21,6 +21,18 @@ module RequestVia
       end
     }.freeze
 
+    RequestWithoutBody = -> http_method {
+      -> (uri, _) { http_method.new(uri) }
+    }.freeze
+
+    RequestWithBody = -> http_method {
+      -> (uri, params) {
+        req = http_method.new(uri)
+        req.set_form_data(params) if IsAHash.(params)
+        return req
+      }
+    }.freeze
+
     FetchWith = -> (uri_builder, request_builder) {
       -> (url, params: nil, headers: nil, response_and_request: false) {
         uri = uri_builder.(url, params)
@@ -30,24 +42,12 @@ module RequestVia
       }
     }.freeze
 
-    RequestWithoutBody = -> verb {
-      -> (uri, _) { verb.new(uri) }
+    FetchWithBodyVia = -> http_method {
+      FetchWith.(URIWithoutParams, RequestWithBody.(http_method)).freeze
     }.freeze
 
-    RequestWithBody = -> verb {
-      -> (uri, params) {
-        req = verb.new(uri)
-        req.set_form_data(params) if IsAHash.(params)
-        return req
-      }
-    }.freeze
-
-    FetchWithBodyVia = -> verb {
-      FetchWith.(URIWithoutParams, RequestWithBody.(verb)).freeze
-    }.freeze
-
-    FetchWithQueryStringVia = -> verb {
-      FetchWith.(URIWithParams, RequestWithoutBody.(verb)).freeze
+    FetchWithQueryStringVia = -> http_method {
+      FetchWith.(URIWithParams, RequestWithoutBody.(http_method)).freeze
     }.freeze
   end
 end
