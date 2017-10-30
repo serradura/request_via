@@ -4,6 +4,30 @@ A fast and functional (API and paradigm) HTTP client, using only Ruby's standard
 
 ![gif](http://g.recordit.co/S6EPTX5hHH.gif)
 
+List of all commands shown in the GIF:
+```ruby
+require 'request_via'
+
+# Thanks to @ElliottLandsborough Dog CEO API (https://github.com/ElliottLandsborough/dog-ceo-api)
+
+# --- Single request
+
+response = RequestVia::Get.('https://dog.ceo/api/breed/boxer/images/random');
+response.body
+
+# --- Make requests over a map iteration
+
+dogs = [ 'akita', 'chihuahua', 'beagle' ]
+dogs_images = dogs.map { |breed_name| "https://dog.ceo/api/breed/#{breed_name}/images/random" }
+dogs_images.map(&RequestVia::Get).map(&:body)
+
+# --- Make requests over an ASYNC map iteration
+
+require 'parallel' # https://rubygems.org/gems/parallel
+
+Parallel.map(dogs_images, &RequestVia::Get).map(&:body)
+```
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -24,36 +48,36 @@ Or install it yourself as:
 
 Making a GET request with http
 ```ruby
-  # Use http:// as the protocol when there is no one defined.
-  RequestVia::Get.call('example.com')
+# Use http:// as the protocol when there is no one defined.
+RequestVia::Get.call('example.com')
 
-  RequestVia::Get.call('http://example.com')
+RequestVia::Get.call('http://example.com')
 
-  # We recommend to use the `.()` syntax to invoke/make the HTTP requests.
-  # Read more about this: https://ruby-doc.org/core-2.2.2/Proc.html#method-i-call
-  RequestVia::Get.('example.com')
+# We recommend to use the `.()` syntax to invoke/make the HTTP requests.
+# Read more about this: https://ruby-doc.org/core-2.2.2/Proc.html#method-i-call
+RequestVia::Get.('example.com')
 
-  # Request with params
-  RequestVia::Get.('example.com', params: { foo: 'bar' })
+# Request with params
+RequestVia::Get.('example.com', params: { foo: 'bar' })
 
-  # Request with headers
-  RequestVia::Get.('example.com/foo', headers: { 'X-Requested-With': 'RequestVia gem' })
+# Request with headers
+RequestVia::Get.('example.com/foo', headers: { 'X-Requested-With': 'RequestVia gem' })
 
-  # Return the response and request objects as result
-  response, request = RequestVia::Get.('example.com/foo', response_and_request: true)
+# Return the response and request objects as result
+response, request = RequestVia::Get.('example.com/foo', response_and_request: true)
 ```
 
 Making other HTTP method requests.
 (**NOTE:** you can use all arguments of previous examples)
 ```ruby
-  RequestVia::Post.('example.com')
-  RequestVia::Put.('example.com')
-  RequestVia::Delete.('example.com')
+RequestVia::Post.('example.com')
+RequestVia::Put.('example.com')
+RequestVia::Delete.('example.com')
 ```
 
 Making a HTTPS request.
 ```ruby
-  RequestVia::Get.('https://example.com')
+RequestVia::Get.('https://example.com')
 ```
 
 ## Development
