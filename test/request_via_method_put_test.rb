@@ -8,11 +8,8 @@ class RequestViaMethodPutTest < Minitest::Test
   WWW_EXAMPLE_COM = "www.#{EXAMPLE_COM}"
 
   def test_request_without_protocol
-    stub_request(:put, Http.(EXAMPLE_COM))
-
-    response = RequestVia::Put.(EXAMPLE_COM)
-
-    assert_equal '200', response.code
+    Support::RequestWithoutProtocol.new(self)
+                                   .(:put, protocol_to_request: 'http')
   end
 
   def test_response_and_request_option
