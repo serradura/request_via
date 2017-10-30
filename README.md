@@ -1,6 +1,6 @@
 # RequestVia
 
-A fast and functional (API and paradigm) HTTP client, using only standard library's dependencies. e.g: Net::HTTP, and URI.
+A fast and functional (API and paradigm) HTTP client, using only Ruby's standard library as dependency. e.g: Net::HTTP and URI.
 
 ## Installation
 
