@@ -2,6 +2,8 @@
 
 A fast and functional (API and paradigm) HTTP client, using only Ruby's standard library as dependency. e.g: Net::HTTP and URI.
 
+![gif](http://g.recordit.co/S6EPTX5hHH.gif)
+
 ## Installation
 
 Add this line to your application's Gemfile:
