@@ -1,12 +1,6 @@
 require "test_helper"
 
 class RequestViaMethodGetTest < Minitest::Test
-  Http = -> url { "http://#{url}" }
-  Https = -> url { "https://#{url}" }
-
-  EXAMPLE_COM = 'example.com'
-  WWW_EXAMPLE_COM = "www.#{EXAMPLE_COM}"
-
   def test_request_without_protocol
     assert_http = Support::Assertions::RequestWithoutProtocol.new(self, http_method: :get)
     assert_http.(protocol_to_request: 'http')
@@ -19,42 +13,31 @@ class RequestViaMethodGetTest < Minitest::Test
     assert_http.(protocol_to_request: 'https')
   end
 
-  def test_get_request
-    # Without params
-    stub_request(:get, Http.(EXAMPLE_COM))
-    stub_request(:get, Https.(EXAMPLE_COM))
+  def test_request_without_params
+    assert_http = Support::Assertions::RequestWithQuery.new(self, http_method: :get)
+    assert_http.(protocol_to_request: false, params: {}, headers: {})
+    assert_http.(protocol_to_request: 'http', params: {}, headers: {})
+    assert_http.(protocol_to_request: 'https', params: {}, headers: {})
+  end
 
-    res1 = RequestVia::Get.(Http.(EXAMPLE_COM))
-    res2 = RequestVia::Get.(Https.(EXAMPLE_COM))
+  def test_request_with_params
+    assert_http = Support::Assertions::RequestWithQuery.new(self, http_method: :get)
+    assert_http.(protocol_to_request: false, params: {'a' => '1'}, headers: {})
+    assert_http.(protocol_to_request: 'http', params: {b: '2'}, headers: {})
+    assert_http.(protocol_to_request: 'https', params: {c: 3}, headers: {})
+  end
 
-    assert_equal '200', res1.code
-    assert_equal '200', res2.code
+  def test_request_with_headers
+    assert_http = Support::Assertions::RequestWithQuery.new(self, http_method: :get)
+    assert_http.(protocol_to_request: false, params: {}, headers: {'Accept' => 'image/png' })
+    assert_http.(protocol_to_request: 'http', params: {}, headers: {'Accept' => 'image/jpg' })
+    assert_http.(protocol_to_request: 'https', params: {}, headers: {'Accept' => 'image/gif' })
+  end
 
-    # With params
-    stub_request(:get, Https.(WWW_EXAMPLE_COM)).with(query: {'a' => '1'})
-
-    res3 = RequestVia::Get.(Https.(WWW_EXAMPLE_COM), params: { a: '1' } )
-
-    assert_equal '200', res3.code
-
-    # With headers
-    stub_request(:get, Https.(WWW_EXAMPLE_COM)).with(headers: {'Accept' => 'image/png' })
-
-    res4 = RequestVia::Get.(Https.(WWW_EXAMPLE_COM), headers: { 'Accept' => 'image/png' } )
-
-    assert_equal '200', res4.code
-
-    # With headers and params
-    stub_request(:get, Https.(WWW_EXAMPLE_COM)).with(
-      headers: {'Accept' => 'image/png' }, query: {'a' => '2'}
-    )
-
-    res4 = RequestVia::Get.(
-      Https.(WWW_EXAMPLE_COM),
-      headers: { 'Accept' => 'image/png' },
-      params: { 'a' => 2 }
-    )
-
-    assert_equal '200', res4.code
+  def test_request_with_headers_and_params
+    assert_http = Support::Assertions::RequestWithQuery.new(self, http_method: :get)
+    assert_http.(protocol_to_request: false, params: {c: 3}, headers: {'Accept' => 'image/png' })
+    assert_http.(protocol_to_request: 'http', params: {b: '2'}, headers: {'Accept' => 'image/jpg' })
+    assert_http.(protocol_to_request: 'https', params: {'a' => '1'}, headers: {'Accept' => 'image/gif' })
   end
 end
