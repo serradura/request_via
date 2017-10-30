@@ -13,12 +13,9 @@ class RequestViaMethodPostTest < Minitest::Test
   end
 
   def test_response_and_request_option
-    stub_request(:post, Http.(EXAMPLE_COM))
-
-    res, req = RequestVia::Post.(EXAMPLE_COM, response_and_request: true)
-
-    assert_equal '200', res.code
-    assert_equal Net::HTTP::Post, req.class
+    assertion = Support::Assertions::ResponseAndRequestOption.new(self)
+    assertion.(:post, protocol_to_request: 'http')
+    assertion.(:post, protocol_to_request: 'https')
   end
 
   def test_post_request

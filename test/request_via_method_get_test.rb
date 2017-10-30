@@ -13,12 +13,9 @@ class RequestViaMethodGetTest < Minitest::Test
   end
 
   def test_response_and_request_option
-    stub_request(:get, Http.(EXAMPLE_COM))
-
-    res, req = RequestVia::Get.(EXAMPLE_COM, response_and_request: true)
-
-    assert_equal '200', res.code
-    assert_equal Net::HTTP::Get, req.class
+    assertion = Support::Assertions::ResponseAndRequestOption.new(self)
+    assertion.(:get, protocol_to_request: 'http')
+    assertion.(:get, protocol_to_request: 'https')
   end
 
   def test_get_request

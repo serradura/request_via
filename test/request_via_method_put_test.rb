@@ -13,12 +13,9 @@ class RequestViaMethodPutTest < Minitest::Test
   end
 
   def test_response_and_request_option
-    stub_request(:put, Http.(EXAMPLE_COM))
-
-    res, req = RequestVia::Put.(EXAMPLE_COM, response_and_request: true)
-
-    assert_equal '200', res.code
-    assert_equal Net::HTTP::Put, req.class
+    assertion = Support::Assertions::ResponseAndRequestOption.new(self)
+    assertion.(:put, protocol_to_request: 'http')
+    assertion.(:put, protocol_to_request: 'https')
   end
 
   def test_put_request
