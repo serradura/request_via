@@ -5,4 +5,5 @@ require "minitest/autorun"
 require 'webmock/minitest'
 
 require_relative 'support/routes'
-require_relative 'support/request_without_protocol'
+require_relative 'support/assertions/base'
+require_relative 'support/assertions/request_without_protocol'

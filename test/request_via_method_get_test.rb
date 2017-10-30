@@ -8,8 +8,8 @@ class RequestViaMethodGetTest < Minitest::Test
   WWW_EXAMPLE_COM = "www.#{EXAMPLE_COM}"
 
   def test_request_without_protocol
-    Support::RequestWithoutProtocol.new(self)
-                                   .(:get, protocol_to_request: 'http')
+    assertion = Support::Assertions::RequestWithoutProtocol.new(self)
+    assertion.(:get, protocol_to_request: 'http')
   end
 
   def test_response_and_request_option
