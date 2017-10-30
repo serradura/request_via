@@ -27,15 +27,15 @@ Making a GET request with http
 
   RequestVia::Get.call('http://example.com')
 
-  # We recommend use `.()` syntax to invoke/make the HTTP requests
-  # Read more about this syntax sugar: https://ruby-doc.org/core-2.2.2/Proc.html#method-i-call
+  # We recommend to use the `.()` syntax to invoke/make the HTTP requests.
+  # Read more about this: https://ruby-doc.org/core-2.2.2/Proc.html#method-i-call
   RequestVia::Get.('example.com')
 
   # Request with params
   RequestVia::Get.('example.com', params: { foo: 'bar' })
 
   # Request with headers
-  RequestVia::Get.('example.com/foo', headers: {'X-Requested-With': 'RequestVia gem' })
+  RequestVia::Get.('example.com/foo', headers: { 'X-Requested-With': 'RequestVia gem' })
 
   # Return the response and request objects as result
   response, request = RequestVia::Get.('example.com/foo', response_and_request: true)
