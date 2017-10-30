@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Rodrigo Serradura"]
   spec.email         = ["rodrigo@ysimplicity.com"]
 
-  spec.summary       = %q{Functional Net::HTTP wrapper}
-  spec.description   = %q{Functional Net::HTTP wrapper}
+  spec.summary       = %q{The functional HTTP client.}
+  spec.description   = %q{A fast and functional (API and paradigm) HTTP client, using only standard library's dependencies. e.g: Net::HTTP, and URI.}
   spec.homepage      = "https://github.com/serradura/request_via"
   spec.license       = "MIT"
 

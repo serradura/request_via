@@ -1,8 +1,6 @@
 # RequestVia
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/request_via`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A fast and functional (API and paradigm) HTTP client, using only standard library's dependencies. e.g: Net::HTTP, and URI.
 
 ## Installation
 
@@ -22,7 +20,39 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Making a GET request with http
+```ruby
+  # Use http:// as the protocol when there is no one defined.
+  RequestVia::Get.call('example.com')
+
+  RequestVia::Get.call('http://example.com')
+
+  # We recommend use `.()` syntax to invoke/make the HTTP requests
+  # Read more about this syntax sugar: https://ruby-doc.org/core-2.2.2/Proc.html#method-i-call
+  RequestVia::Get.('example.com')
+
+  # Request with params
+  RequestVia::Get.('example.com', params: { foo: 'bar' })
+
+  # Request with headers
+  RequestVia::Get.('example.com/foo', headers: {'X-Requested-With': 'RequestVia gem' })
+
+  # Return the response and request objects as result
+  response, request = RequestVia::Get.('example.com/foo', response_and_request: true)
+```
+
+Making other HTTP method requests.
+(**NOTE:** you can use all arguments of previous examples)
+```ruby
+  RequestVia::Post.('example.com')
+  RequestVia::Put.('example.com')
+  RequestVia::Delete.('example.com')
+```
+
+Making a HTTPS request.
+```ruby
+  RequestVia::Get.('https://example.com')
+```
 
 ## Development
 
