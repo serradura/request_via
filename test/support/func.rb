@@ -7,13 +7,25 @@ module  Support
       response.code == '200'
     }.freeze
 
-    HTTPMethodConstOf = -> (object, http_method) {
-      object.const_get String(http_method).capitalize
+    Capitalize = -> value {
+      String(value).capitalize
+    }.freeze
+
+    HTTPMethodConstOf = -> (object, constant) {
+      object.const_get constant
+    }.freeze
+
+    GetNetHTTPMethod  = -> http_method {
+      HTTPMethodConstOf.(Net::HTTP, Capitalize.(http_method))
     }.freeze
 
     GetRequestViaHTTPMethod = -> http_method {
-      HTTPMethodConstOf.(RequestVia, http_method)
+      HTTPMethodConstOf.(RequestVia, Capitalize.(http_method))
     }.freeze
+
+    GetReversedHTTPMethodVersion = -> http_method {
+      HTTPMethodConstOf.(RequestVia, "#{Capitalize.(http_method)}R")
+    }
 
     StringifyKeysAndValues = -> hash {
       return hash if hash.empty?
@@ -32,6 +44,13 @@ module  Support
 
     MockDataToRequestWithBody = MockDataToRequest.(:body).freeze
     MockDataToRequestWithQuery = MockDataToRequest.(:query).freeze
+    MockDataToRequestVia = -> http_method {
+      if GetNetHTTPMethod.(http_method)::REQUEST_HAS_BODY
+        MockDataToRequestWithBody
+      else
+        MockDataToRequestWithQuery
+      end
+    }.freeze
   end
 
 end

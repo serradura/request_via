@@ -20,7 +20,7 @@ module Support
       def setup(protocol_to_request)
         @request = Func::GetRequestViaHTTPMethod.(http_method)
         @example_com = Routes::To.(protocol_to_request, :example_com)
-        @net_http_request = Func::HTTPMethodConstOf.(Net::HTTP, http_method)
+        @net_http_request = Func::GetNetHTTPMethod.(http_method)
       end
     end
 
