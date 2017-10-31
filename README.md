@@ -68,7 +68,7 @@ response, request = RequestVia::Get.('example.com/foo', response_and_request: tr
 
 # Request with the reversed arguments order
 %w[
-    example.com/foo example.com/bar
+  example.com/foo example.com/bar
 ].map &RequestVia::GetR.(headers: { 'X-Requested-With': 'RequestVia gem' })
 ```
 
@@ -79,7 +79,7 @@ RequestVia::Post.()    # RequestVia::PostR.()
 
 RequestVia::Put.()     # RequestVia::PutR.()
 
-RequestVia::Delete.()  # RequestVia::DeteteR.()
+RequestVia::Delete.()  # RequestVia::DeleteR.()
 
 RequestVia::Options.() # RequestVia::OptionsR.()
 
