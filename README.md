@@ -63,24 +63,29 @@ RequestVia::Get.('example.com', params: { foo: 'bar' })
 # Request with headers
 RequestVia::Get.('example.com/foo', headers: { 'X-Requested-With': 'RequestVia gem' })
 
-# Return the response and request objects as result
+# Return the response and request objects
 response, request = RequestVia::Get.('example.com/foo', response_and_request: true)
+
+# Request with the reversed arguments order
+%w[
+    example.com/foo example.com/bar
+].map &RequestVia::GetR.(headers: { 'X-Requested-With': 'RequestVia gem' })
 ```
 
 Supported HTTP methods.
 (**NOTE:** you can use all arguments of previous examples)
 ```ruby
-RequestVia::Post.()
+RequestVia::Post.()    # RequestVia::PostR.()
 
-RequestVia::Put.()
+RequestVia::Put.()     # RequestVia::PutR.()
 
-RequestVia::Delete.()
+RequestVia::Delete.()  # RequestVia::DeteteR.()
 
-RequestVia::Options.()
+RequestVia::Options.() # RequestVia::OptionsR.()
 
-RequestVia::Trace.()
+RequestVia::Trace.()   # RequestVia::TraceR.()
 
-RequestVia::Patch.()
+RequestVia::Patch.()   # RequestVia::PatchR.()
 ```
 
 Making a HTTPS request.
