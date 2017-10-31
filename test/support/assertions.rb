@@ -12,11 +12,19 @@ module  Support
 
       Get = HTTPMethod.(:get).freeze
 
+      Head = HTTPMethod.(:head).freeze
+
       Post = HTTPMethod.(:post).freeze
 
       Put = HTTPMethod.(:put).freeze
 
       Delete = HTTPMethod.(:delete).freeze
+
+      Options = HTTPMethod.(:options).freeze
+
+      Trace = HTTPMethod.(:trace).freeze
+
+      Patch = HTTPMethod.(:patch).freeze
     end
   end
 end
