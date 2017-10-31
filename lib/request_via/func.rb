@@ -1,14 +1,16 @@
 # frozen_string_literal: true
 
 module RequestVia
-  module Func
-    ReverseRequestArgsTo = -> request {
-      -> (options, url) {
-        request.(url, **options)
-      }.curry
-    }.freeze
+  Freeze = -> object { object.freeze }.freeze
 
-    ParseURI = -> url {
+  module Func
+    ReverseRequestArgsTo = Freeze.(-> request {
+      Freeze.(-> (options, url) {
+        request.(url, **options)
+      }.curry)
+    })
+
+    ParseURI = Freeze.(-> url {
       if url.start_with?('http://', 'https://')
         ::URI.parse(url)
       elsif /([^:]+)?:?\/\// !~ url
@@ -16,58 +18,62 @@ module RequestVia
       else
         fail ::URI::InvalidURIError, 'URI scheme must be http:// or https://'
       end
-    }.freeze
+    })
 
-    IsAHash = -> data { data.is_a?(::Hash) }.freeze
+    IsAHash = Freeze.(-> data {
+      data.is_a?(::Hash)
+    })
 
-    SetRequestHeaders = -> (request, headers) {
+    SetRequestHeaders = Freeze.(-> (request, headers) {
       return request unless IsAHash.(headers)
       headers.each { |key, value| request[key] = value }
       return request
-    }.freeze
+    })
 
-    URIWithoutParams = -> (url, _) { ParseURI.(url) }.freeze
+    URIWithoutParams = Freeze.(-> (url, _) {
+      ParseURI.(url)
+    })
 
-    URIWithParams = -> (url, params) {
+    URIWithParams = Freeze.(-> (url, params) {
       ParseURI.(url).tap do |uri|
         uri.query = ::URI.encode_www_form(params) if IsAHash.(params)
       end
-    }.freeze
+    })
 
-    RequestWithoutBody = -> http_method {
+    RequestWithoutBody = Freeze.(-> http_method {
       -> (uri, _) { http_method.new(uri) }
-    }.freeze
+    })
 
-    RequestWithBody = -> http_method {
+    RequestWithBody = Freeze.(-> http_method {
       -> (uri, params) {
         req = http_method.new(uri)
         req.set_form_data(params) if IsAHash.(params)
         return req
       }
-    }.freeze
+    })
 
-    FetchWith = -> (uri_builder, request_builder) {
+    FetchWith = Freeze.(-> (uri_builder, request_builder) {
       -> (url, params: nil, headers: nil, response_and_request: false) {
         uri = uri_builder.(url, params)
         req = SetRequestHeaders.(request_builder.(uri, params), headers)
         res = HTTPClient.(uri).request(req)
         response_and_request ? [res, req] : res
       }
-    }.freeze
+    })
 
-    FetchWithBodyVia = -> http_method {
+    FetchWithBodyVia = Freeze.(-> http_method {
       FetchWith.(URIWithoutParams, RequestWithBody.(http_method))
-    }.freeze
+    })
 
-    FetchWithQueryStringVia = -> http_method {
+    FetchWithQueryStringVia = Freeze.(-> http_method {
       FetchWith.(URIWithParams, RequestWithoutBody.(http_method))
-    }.freeze
+    })
 
-    FetchStrategyTo = -> http_method {
+    FetchStrategyTo = Freeze.(-> http_method {
       strategy_to = \
         http_method::REQUEST_HAS_BODY ? FetchWithBodyVia : FetchWithQueryStringVia
 
-      strategy_to.(http_method)
-    }
+      Freeze.(strategy_to.(http_method))
+    })
   end
 end
