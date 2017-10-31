@@ -18,14 +18,21 @@ response.body
 # --- Make requests over a map iteration
 
 dogs = [ 'akita', 'chihuahua', 'beagle' ]
-dogs_images = dogs.map { |breed_name| "https://dog.ceo/api/breed/#{breed_name}/images/random" }
-dogs_images.map(&RequestVia::Get).map(&:body)
+dog_images = dogs.map { |breed_name| "https://dog.ceo/api/breed/#{breed_name}/images/random" }
+dog_images.map(&RequestVia::Get).map(&:body)
+
+# If do you want to pass common arguments to each request use the GetR function (R = reversed arguments)
+# Available options: port, params, headers, open_timeout read_timeout, response_and_request, net_http
+dog_images.map(&RequestVia::GetR.(open_timeout: 10)).map(&:body)
 
 # --- Make requests over an ASYNC map iteration
 
 require 'parallel' # https://rubygems.org/gems/parallel
 
 Parallel.map(dogs_images, &RequestVia::Get).map(&:body)
+
+# Apply common options to each request
+Parallel.map(dogs_images, &RequestVia::GetR.(open_timeout: 10)).map(&:body)
 ```
 
 ## Installation
@@ -70,6 +77,16 @@ response, request = RequestVia::Get.('example.com/foo', response_and_request: tr
 %w[
   example.com/foo example.com/bar
 ].map &RequestVia::GetR.(headers: { 'X-Requested-With': 'RequestVia gem' })
+
+# Other options
+RequestVia::Get.('example.io', port: 2000,
+                               open_timeout: 10,  # Default: 60
+                               read_timeout: 120, # Default: 60
+                               net_http: -> (host, port) {
+                                   net_http = Net::HTTP.new(host, port)
+                                   # Make your customizations
+                                   net_http
+                               })
 ```
 
 Supported HTTP methods.
