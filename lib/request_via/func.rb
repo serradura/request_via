@@ -53,12 +53,19 @@ module RequestVia
     })
 
     FetchWith = Freeze.(-> (uri_builder, request_builder) {
-      -> (url, params: nil, headers: nil, response_and_request: false) {
+      -> (url, port: nil,
+               params: nil,
+               headers: nil,
+               net_http: nil,
+               open_timeout: nil,
+               read_timeout: nil,
+               response_and_request: false) do
         uri = uri_builder.(url, params)
         req = SetRequestHeaders.(request_builder.(uri, params), headers)
-        res = HTTPClient.(uri).request(req)
-        response_and_request ? [res, req] : res
-      }
+        http = HTTPClient.(uri, port, open_timeout, read_timeout, net_http)
+        response = http.request(req)
+        response_and_request ? [response, req] : response
+      end
     })
 
     FetchWithBodyVia = Freeze.(-> http_method {

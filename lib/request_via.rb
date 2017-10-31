@@ -3,9 +3,9 @@
 require 'net/https'
 require 'uri'
 
+require "request_via/func"
 require "request_via/version"
 require "request_via/http_client"
-require "request_via/func"
 
 module RequestVia
   Get     = Func::FetchStrategyTo.(Net::HTTP::Get)
