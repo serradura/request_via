@@ -56,5 +56,12 @@ module RequestVia
     FetchWithQueryStringVia = -> http_method {
       FetchWith.(URIWithParams, RequestWithoutBody.(http_method))
     }.freeze
+
+    FetchStrategyTo = -> http_method {
+      strategy_to = \
+        http_method::REQUEST_HAS_BODY ? FetchWithBodyVia : FetchWithQueryStringVia
+
+      strategy_to.(http_method)
+    }
   end
 end

@@ -8,11 +8,11 @@ require "request_via/http_client"
 require "request_via/func"
 
 module RequestVia
-  Get = Func::FetchWithQueryStringVia.(Net::HTTP::Get).freeze
+  Get = Func::FetchStrategyTo.(Net::HTTP::Get).freeze
 
-  Put = Func::FetchWithBodyVia.(Net::HTTP::Put).freeze
+  Post = Func::FetchStrategyTo.(Net::HTTP::Post).freeze
 
-  Post = Func::FetchWithBodyVia.(Net::HTTP::Post).freeze
+  Put = Func::FetchStrategyTo.(Net::HTTP::Put).freeze
 
-  Delete = Func::FetchWithQueryStringVia.(Net::HTTP::Delete).freeze
+  Delete = Func::FetchStrategyTo.(Net::HTTP::Delete).freeze
 end
