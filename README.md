@@ -67,12 +67,20 @@ RequestVia::Get.('example.com/foo', headers: { 'X-Requested-With': 'RequestVia g
 response, request = RequestVia::Get.('example.com/foo', response_and_request: true)
 ```
 
-Making other HTTP method requests.
+Supported HTTP methods.
 (**NOTE:** you can use all arguments of previous examples)
 ```ruby
-RequestVia::Post.('example.com')
-RequestVia::Put.('example.com')
-RequestVia::Delete.('example.com')
+RequestVia::Post.()
+
+RequestVia::Put.()
+
+RequestVia::Delete.()
+
+RequestVia::Options.()
+
+RequestVia::Trace.()
+
+RequestVia::Patch.()
 ```
 
 Making a HTTPS request.
