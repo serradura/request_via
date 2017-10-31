@@ -2,6 +2,12 @@
 
 module RequestVia
   module Func
+    ReverseRequestArgsTo = -> request {
+      -> (options, url) {
+        request.(url, **options)
+      }.curry
+    }.freeze
+
     ParseURI = -> url {
       if url.start_with?('http://', 'https://')
         ::URI.parse(url)
