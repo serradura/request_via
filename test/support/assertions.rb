@@ -7,24 +7,17 @@ module  Support
         -> use_case {
           assertion = Support::Assertions.const_get(use_case)
           assertion.new(context, http_method: http_method)
-        }
+        }.freeze
       }.curry.freeze
 
-      Get = HTTPMethod.(:get).freeze
-
-      Head = HTTPMethod.(:head).freeze
-
-      Post = HTTPMethod.(:post).freeze
-
-      Put = HTTPMethod.(:put).freeze
-
-      Delete = HTTPMethod.(:delete).freeze
-
-      Options = HTTPMethod.(:options).freeze
-
-      Trace = HTTPMethod.(:trace).freeze
-
-      Patch = HTTPMethod.(:patch).freeze
+      Get     = HTTPMethod.(:get)
+      Head    = HTTPMethod.(:head)
+      Post    = HTTPMethod.(:post)
+      Put     = HTTPMethod.(:put)
+      Delete  = HTTPMethod.(:delete)
+      Options = HTTPMethod.(:options)
+      Trace   = HTTPMethod.(:trace)
+      Patch   = HTTPMethod.(:patch)
     end
   end
 end
