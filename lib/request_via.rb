@@ -5,7 +5,8 @@ require 'uri'
 
 require "request_via/func"
 require "request_via/version"
-require "request_via/http_client"
+require "request_via/net_http"
+require "request_via/client"
 
 module RequestVia
   Get     = Func::FetchStrategyTo.(Net::HTTP::Get)
