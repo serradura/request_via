@@ -92,6 +92,8 @@ RequestVia::Get.('example.io', port: 2000,
 Supported HTTP methods.
 (**NOTE:** you can use all arguments of previous examples)
 ```ruby
+RequestVia::Head.()    # RequestVia::HeadR.()
+
 RequestVia::Post.()    # RequestVia::PostR.()
 
 RequestVia::Put.()     # RequestVia::PutR.()
@@ -108,6 +110,33 @@ RequestVia::Patch.()   # RequestVia::PatchR.()
 Making a HTTPS request.
 ```ruby
 RequestVia::Get.('https://example.com')
+```
+
+Create a HTTP(S) client for REST resources.
+```ruby
+client = RequestVia::Client.('https://example.com')
+
+client.get # same of client.get('/')
+
+# Supported arguments: params:, headers:
+client.get('foo', params: { a: 1 })
+
+client.post('/bar', headers: { 'User-Agent' => 'REST Example' })
+
+# Supported options
+RequestVia::Client.('example.com/foo/bar', port: 3000,
+                                           open_timeout: 10,
+                                           read_timeout: 100)
+
+# Supported HTTP methods:
+# client.get
+# client.head
+# client.post
+# client.put
+# client.delete
+# client.options
+# client.trace
+# client.patch
 ```
 
 ## Development
