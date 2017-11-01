@@ -53,7 +53,7 @@ Or install it yourself as:
 
 ## Usage
 
-Making a GET request with http
+Making a HTTP GET request
 ```ruby
 # Use http:// as the protocol when there is no one defined.
 RequestVia::Get.call('example.com')
