@@ -119,14 +119,11 @@ client = RequestVia::Client.('https://example.com')
 client.get # same of client.get('/')
 
 # Supported arguments: params:, headers:
+client.get(params: { a: 1 }, headers: { 'Header-Name' => 'Header-Value' })
+
 client.get('foo', params: { a: 1 })
 
-client.post('/bar', headers: { 'User-Agent' => 'REST Example' })
-
-# Supported options
-RequestVia::Client.('example.com/foo/bar', port: 3000,
-                                           open_timeout: 10,
-                                           read_timeout: 100)
+client.get('/bar', headers: { 'User-Agent' => 'REST Example' })
 
 # Supported HTTP methods:
 # client.get
@@ -137,6 +134,11 @@ RequestVia::Client.('example.com/foo/bar', port: 3000,
 # client.options
 # client.trace
 # client.patch
+
+# Supported options
+RequestVia::Client.('example.com/foo/bar', port: 3000,
+                                           open_timeout: 10,
+                                           read_timeout: 100)
 ```
 
 ## Development
