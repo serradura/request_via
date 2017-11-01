@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 module RequestVia
+  DEFAULT_HEADERS = {
+    'User-Agent' => "RequestVia v#{RequestVia::VERSION}"
+  }.freeze
+
   Freeze = -> object { object.freeze }.freeze
 
   module Func
@@ -25,8 +29,12 @@ module RequestVia
     })
 
     SetRequestHeaders = Freeze.(-> (request, headers) {
-      return request unless IsAHash.(headers)
-      headers.each { |key, value| request[key] = value }
+      request_headers = IsAHash.(headers) ? headers : {}
+
+      DEFAULT_HEADERS.merge(request_headers).each do |key, value|
+        request[key] = value
+      end
+
       return request
     })
 
@@ -62,7 +70,7 @@ module RequestVia
                response_and_request: false) do
         uri = uri_builder.(url, params)
         req = SetRequestHeaders.(request_builder.(uri, params), headers)
-        http = HTTPClient.(uri, port, open_timeout, read_timeout, net_http)
+        http = NetHTTP.(uri, port, open_timeout, read_timeout, net_http)
         response = http.request(req)
         response_and_request ? [response, req] : response
       end

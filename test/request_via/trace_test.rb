@@ -10,6 +10,13 @@ class RequestViaTraceTest < Minitest::Test
     assert_http.(protocol_to_request: 'http')
   end
 
+  def test_request_with_default_headers
+    assert_http = @use_cases.('RequestWithDefaultHeaders')
+    assert_http.(protocol_to_request: false)
+    assert_http.(protocol_to_request: 'http')
+    assert_http.(protocol_to_request: 'https')
+  end
+
   def test_response_and_request_option
     assert_http = @use_cases.('ResponseAndRequestOption')
     assert_http.(protocol_to_request: false)
