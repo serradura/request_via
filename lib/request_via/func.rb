@@ -71,17 +71,17 @@ module RequestVia
       end
     }
 
-    FetchWithBodyVia = -> http_method {
+    FetchWithBody = -> http_method {
       FetchWith.(URIWithoutParams, RequestWithBody.(http_method))
     }
 
-    FetchWithQueryStringVia = -> http_method {
+    FetchWithQueryString = -> http_method {
       FetchWith.(URIWithParams, RequestWithoutBody.(http_method))
     }
 
     FetchStrategyTo = -> http_method {
       strategy_to = \
-        http_method::REQUEST_HAS_BODY ? FetchWithBodyVia : FetchWithQueryStringVia
+        http_method::REQUEST_HAS_BODY ? FetchWithBody : FetchWithQueryString
 
       strategy_to.(http_method)
     }
