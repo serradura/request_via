@@ -5,16 +5,18 @@ module RequestVia
   class Client
     attr_reader :address, :net_http
 
-    BuildURL = Freeze.(-> (address, path) {
-      "#{address}#{path.start_with?('/') ? path : "/#{path}"}"
-    }.curry)
+    ROOT_PATH = Freeze.('/')
+
+    BuildURL = -> (address, path) {
+      "#{address}#{path.start_with?(ROOT_PATH) ? path : "/#{path}"}"
+    }.curry
 
     BuildAddress = -> (uri, address) {
       has_port = uri.port && address =~ /:\d+/
       Freeze.(%{#{uri.scheme}://#{uri.host}#{":#{uri.port}" if has_port}}.chomp('/'))
     }
 
-    OptionsBuilder = Freeze.(-> net_http {
+    OptionsBuilder = -> net_http {
       -> (options) {
         {
           params: options[:params],
@@ -22,7 +24,15 @@ module RequestVia
           net_http: net_http
         }
       }
-    })
+    }
+
+    ResolveArgsToFetch = -> ((left, right)) {
+      case left
+      when nil then [ROOT_PATH, {}]
+      when Hash then [ROOT_PATH, left]
+      else [String(left), Hash(right)]
+      end
+    }
 
     def self.call(address, port: nil, open_timeout: nil, read_timeout: nil)
       self.new(address, port, open_timeout, read_timeout)
@@ -32,47 +42,51 @@ module RequestVia
       uri = Freeze.(Func::ParseURI.(address))
 
       @address = BuildAddress.(uri, address)
-      @build_url = BuildURL.(@address)
+      @url_with = BuildURL.(@address)
       @net_http = NetHTTP.(uri, port, open_timeout, read_timeout)
       @options = OptionsBuilder.(@net_http)
     end
 
-    def get(path = '/', **options)
-      fetch(RequestVia::Get, path, options)
+    def get(*args)
+      fetch(RequestVia::Get, args)
     end
 
-    def head(path = '/', **options)
-      fetch(RequestVia::Head, path, options)
+    def head(*args)
+      fetch(RequestVia::Head, args)
     end
 
-    def post(path = '/', **options)
-      fetch(RequestVia::Post, path, options)
+    def post(*args)
+      fetch(RequestVia::Post, args)
     end
 
-    def put(path = '/', **options)
-      fetch(RequestVia::Put, path, options)
+    def put(*args)
+      fetch(RequestVia::Put, args)
     end
 
-    def delete(path = '/', **options)
-      fetch(RequestVia::Delete, path, options)
+    def delete(*args)
+      fetch(RequestVia::Delete, args)
     end
 
-    def options(path = '/', **options)
-      fetch(RequestVia::Options, path, options)
+    def options(*args)
+      fetch(RequestVia::Options, args)
     end
 
-    def trace(path = '/', **options)
-      fetch(RequestVia::Trace, path, options)
+    def trace(*args)
+      fetch(RequestVia::Trace, args)
     end
 
-    def patch(path = '/', **options)
-      fetch(RequestVia::Patch, path, options)
+    def patch(*args)
+      fetch(RequestVia::Patch, args)
     end
 
     private
 
-    def fetch(http_method, path, keyword_args)
-      http_method.(@build_url.(path), **@options.(keyword_args))
+    def fetch(http_method, args)
+      path, keyword_args = ResolveArgsToFetch.(args)
+
+      options = @options.(keyword_args)
+
+      http_method.(@url_with.(path), **options)
     end
   end
 
