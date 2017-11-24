@@ -34,7 +34,7 @@ module RequestVia
 
       return http if IsNetHTTP.(http)
 
-      fail TypeError, 'net_http proc must return a Net:HTTP instance'
+      fail ArgumentError, 'net_http proc must to return a Net:HTTP instance'
     end
 
     def set_https!(net_http)

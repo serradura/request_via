@@ -68,7 +68,7 @@ class RequestViaTest < Minitest::Test
   def test_net_http_option_error
     net_http_option = -> (host, port) { 'Is not a Net::HTTP object' }
 
-    assert_raises TypeError do
+    assert_raises ArgumentError do
       RequestVia::Get.('http://foo.com', net_http: net_http_option )
     end
   end
