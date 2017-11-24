@@ -3,7 +3,7 @@
 require 'net/https'
 require 'uri'
 
-require "request_via/version"
+require "request_via/boot"
 require "request_via/func"
 require "request_via/net_http"
 require "request_via/client"

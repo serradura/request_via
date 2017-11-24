@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
 module RequestVia
-  module SemVer
-    MAJOR = 0
-    MINOR = 5
-    PATCH = 1
+  module SemanticVersion
+    def self.call(major, minor, patch)
+      [ major, minor, patch ]
+        .join('.')
+        .freeze
+    end
   end
 
-  VERSION = [
-    SemVer::MAJOR,
-    SemVer::MINOR,
-    SemVer::PATCH,
-  ].join('.').freeze
+  VERSION = SemanticVersion.(0, 5, 1)
 end

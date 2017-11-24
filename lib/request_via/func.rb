@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 
 module RequestVia
-  DEFAULT_HEADERS = {
-    'User-Agent' => "RequestVia v#{RequestVia::VERSION}"
-  }.freeze
-
-  Freeze = -> object { object.freeze }.freeze
-
   module Func
     ReverseRequestArgsTo = Freeze.(-> request {
       Freeze.(-> (options, url) {
