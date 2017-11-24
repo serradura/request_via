@@ -4,13 +4,13 @@ module RequestVia
   module NetHTTP
     extend self
 
-    Build = Freeze.(-> (host, port) {
+    Build = -> (host, port) {
       Net::HTTP.new(host, port)
-    })
+    }
 
-    IsNetHTTP = Freeze.(-> object {
+    IsNetHTTP = -> object {
       object.instance_of?(Net::HTTP)
-    })
+    }
 
     def call(uri, port = nil, open_timeout = nil, read_timeout = nil, net_http = nil)
       return net_http if IsNetHTTP.(net_http)

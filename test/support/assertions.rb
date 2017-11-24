@@ -7,8 +7,8 @@ module  Support
         -> use_case {
           assertion = Support::Assertions.const_get(use_case)
           assertion.new(context, http_method: http_method)
-        }.freeze
-      }.curry.freeze
+        }
+      }.curry
 
       Get     = HTTPMethod.(:get)
       Head    = HTTPMethod.(:head)

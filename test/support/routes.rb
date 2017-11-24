@@ -12,17 +12,17 @@ module  Support
 
     HTTP = -> url {
       "http://#{url}"
-    }.freeze
+    }
 
     HTTPS = -> url {
       "https://#{url}"
-    }.freeze
+    }
 
     ResolveProtocol = -> protocol {
       String(protocol == false ? '' : protocol)
         .strip
         .downcase
-    }.freeze
+    }
 
     BuildRoute = -> (host, protocol) {
       case ResolveProtocol.(protocol)
@@ -31,11 +31,11 @@ module  Support
       when 'https' then HTTPS.(host)
       else fail NotImplementedError
       end
-    }.freeze
+    }
 
     To = -> (protocol, host) {
       BuildRoute.(self[host], protocol)
-    }.curry.freeze
+    }.curry
 
     def [](host)
       HOSTS.fetch(host)

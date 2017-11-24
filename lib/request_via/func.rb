@@ -2,13 +2,14 @@
 
 module RequestVia
   module Func
-    ReverseRequestArgsTo = Freeze.(-> request {
-      Freeze.(-> (options, url) {
-        request.(url, **options)
-      }.curry)
-    })
 
-    ParseURI = Freeze.(-> url {
+    ReverseRequestArgsTo = -> request {
+      -> (options, url) {
+        request.(url, **options)
+      }.curry
+    }
+
+    ParseURI = -> url {
       if url.start_with?('http://', 'https://')
         ::URI.parse(url)
       elsif /([^:]+)?:?\/\// !~ url
@@ -16,13 +17,13 @@ module RequestVia
       else
         fail ::URI::InvalidURIError, 'URI scheme must be http:// or https://'
       end
-    })
+    }
 
-    IsAHash = Freeze.(-> data {
+    IsAHash = -> data {
       data.is_a?(::Hash)
-    })
+    }
 
-    SetRequestHeaders = Freeze.(-> (request, headers) {
+    SetRequestHeaders = -> (request, headers) {
       request_headers = IsAHash.(headers) ? headers : {}
 
       DEFAULT_HEADERS.merge(request_headers).each do |key, value|
@@ -30,31 +31,31 @@ module RequestVia
       end
 
       return request
-    })
+    }
 
-    URIWithoutParams = Freeze.(-> (url, _) {
+    URIWithoutParams = -> (url, _) {
       ParseURI.(url)
-    })
+    }
 
-    URIWithParams = Freeze.(-> (url, params) {
+    URIWithParams = -> (url, params) {
       ParseURI.(url).tap do |uri|
         uri.query = ::URI.encode_www_form(params) if IsAHash.(params)
       end
-    })
+    }
 
-    RequestWithoutBody = Freeze.(-> http_method {
+    RequestWithoutBody = -> http_method {
       -> (uri, _) { http_method.new(uri) }
-    })
+    }
 
-    RequestWithBody = Freeze.(-> http_method {
+    RequestWithBody = -> http_method {
       -> (uri, params) {
         req = http_method.new(uri)
         req.set_form_data(params) if IsAHash.(params)
         return req
       }
-    })
+    }
 
-    FetchWith = Freeze.(-> (uri_builder, request_builder) {
+    FetchWith = -> (uri_builder, request_builder) {
       -> (url, port: nil,
                params: nil,
                headers: nil,
@@ -68,21 +69,22 @@ module RequestVia
         response = http.request(req)
         response_and_request ? [response, req] : response
       end
-    })
+    }
 
-    FetchWithBodyVia = Freeze.(-> http_method {
+    FetchWithBodyVia = -> http_method {
       FetchWith.(URIWithoutParams, RequestWithBody.(http_method))
-    })
+    }
 
-    FetchWithQueryStringVia = Freeze.(-> http_method {
+    FetchWithQueryStringVia = -> http_method {
       FetchWith.(URIWithParams, RequestWithoutBody.(http_method))
-    })
+    }
 
-    FetchStrategyTo = Freeze.(-> http_method {
+    FetchStrategyTo = -> http_method {
       strategy_to = \
         http_method::REQUEST_HAS_BODY ? FetchWithBodyVia : FetchWithQueryStringVia
 
-      Freeze.(strategy_to.(http_method))
-    })
+      strategy_to.(http_method)
+    }
+
   end
 end
