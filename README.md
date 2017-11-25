@@ -12,7 +12,7 @@ require 'request_via'
 
 # --- Single request
 
-response = RequestVia::Get.('https://dog.ceo/api/breed/boxer/images/random');
+response = RequestVia::Get.('https://dog.ceo/api/breed/boxer/images/random')
 response.body
 
 # --- Make requests over a map iteration
@@ -29,10 +29,10 @@ dog_images.map(&RequestVia::GetR.(open_timeout: 10)).map(&:body)
 
 require 'parallel' # https://rubygems.org/gems/parallel
 
-Parallel.map(dogs_images, &RequestVia::Get).map(&:body)
+Parallel.map(dog_images, &RequestVia::Get).map(&:body)
 
 # Apply common options to each request
-Parallel.map(dogs_images, &RequestVia::GetR.(open_timeout: 10)).map(&:body)
+Parallel.map(dog_images, &RequestVia::GetR.(open_timeout: 10)).map(&:body)
 ```
 
 ## Installation
