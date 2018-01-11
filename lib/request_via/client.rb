@@ -3,7 +3,12 @@
 module RequestVia
 
   class Client
-    attr_reader :address, :net_http
+    attr_accessor :address
+    attr_reader :net_http, :map
+
+    Map = -> (client, path) {
+      client.clone.tap { |c| c.address = BuildURL.(c.address, path) }
+    }.curry
 
     ROOT_PATH = Freeze.('/')
 
@@ -45,6 +50,7 @@ module RequestVia
       @url_with = BuildURL.(@address)
       @net_http = NetHTTP.(uri, port, open_timeout, read_timeout)
       @options = OptionsBuilder.(@net_http)
+      @map = Map.(self)
     end
 
     def get(*args)

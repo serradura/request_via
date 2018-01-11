@@ -6,6 +6,7 @@ class RequestViaClientTest < Minitest::Test
     stub_request(:any, 'http://example.io')
     stub_request(:any, 'http://example.io').with(query: { 'a' => '1' }, headers: { 'Foo' => 'foo' })
     stub_request(:any, 'http://example.io/foo')
+    stub_request(:any, 'http://example.io/bar')
     stub_request(:any, 'https://example.com/foo/bar')
     stub_request(:any, 'https://example.com/foo/bar').with(body: { 'b' => '2'}, headers: { 'Bar' => 'bar' })
 
@@ -95,5 +96,15 @@ class RequestViaClientTest < Minitest::Test
     assert Support::Func::IsOK.(@client2.patch('/foo'))
     assert Support::Func::IsOK.(@client3.patch('foo/bar'))
     assert Support::Func::IsOK.(@client3.patch('/foo/bar', headers: { bar: :bar }))
+  end
+
+  def test_map_client_to_resource
+    [
+      'foo',
+      'bar',
+    ].map(&@client1.map) 
+    .map do |client|
+      assert Support::Func::IsOK.(client.get)
+    end
   end
 end
