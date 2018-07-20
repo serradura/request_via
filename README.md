@@ -21,7 +21,7 @@ dogs = [ 'akita', 'chihuahua', 'beagle' ]
 dog_images = dogs.map { |breed_name| "https://dog.ceo/api/breed/#{breed_name}/images/random" }
 dog_images.map(&RequestVia::Get).map(&:body)
 
-# If do you want to pass common arguments to each request use the GetR function (R = reversed arguments)
+# If do you want to pass common arguments for each request use the GetR function (R = reversed arguments)
 # Available options: port, params, headers, open_timeout read_timeout, response_and_request, net_http
 dog_images.map(&RequestVia::GetR.(open_timeout: 10)).map(&:body)
 
@@ -31,7 +31,7 @@ require 'parallel' # https://rubygems.org/gems/parallel
 
 Parallel.map(dog_images, &RequestVia::Get).map(&:body)
 
-# Apply common options to each request
+# Apply common options for each request
 Parallel.map(dog_images, &RequestVia::GetR.(open_timeout: 10)).map(&:body)
 ```
 
