@@ -3,7 +3,12 @@
 module RequestVia
 
   class Client
-    attr_reader :address, :net_http
+    attr_reader :address, :port, :open_timeout, :read_timeout, 
+                :net_http, :map
+
+    Map = -> (client, path) {
+      client.update(address: BuildURL.(client.address, path))
+    }.curry
 
     ROOT_PATH = Freeze.('/')
 
@@ -45,6 +50,7 @@ module RequestVia
       @url_with = BuildURL.(@address)
       @net_http = NetHTTP.(uri, port, open_timeout, read_timeout)
       @options = OptionsBuilder.(@net_http)
+      @map = Map.(self)
     end
 
     def get(*args)
@@ -79,6 +85,13 @@ module RequestVia
       fetch(RequestVia::Patch, args)
     end
 
+    def update(address: self.address, port: self.port, 
+               open_timeout: self.open_timeout, 
+               read_timeout: self.read_timeout)
+      RequestVia::Client.new(address, port, 
+                             open_timeout, read_timeout)      
+    end
+
     private
 
     def fetch(http_method, args)
@@ -88,6 +101,7 @@ module RequestVia
 
       http_method.(@url_with.(path), **options)
     end
+
   end
 
 end
